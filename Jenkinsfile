@@ -6,6 +6,12 @@ pipeline {
     triggers {
     cron('30 10 * * *')
     }
+    environment {
+    BASE_URL = 'https://www.landydev.com/#/auth/login'
+    USERNAME = 'velmurugan@stepladdersolutions.com'
+    PASSWORD = 'Test@123'
+}
+
 
     options {
     timeout(time: 1, unit: 'HOURS')
