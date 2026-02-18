@@ -9,7 +9,7 @@ test('Excel data based automation', async ({ page }) => {
   // -------- Login (once) --------
   await page.goto('https://www.landydev.com/#/auth/login');
   await page.waitForLoadState('networkidle');
-  await page.getByRole('textbox', { name: 'Email' }).fill('sengeni@stepladdersolutions.com');
+  await page.getByRole('textbox', { name: 'Email' }).fill('velmurugan@stepladdersolutions.com');
   await page.getByRole('textbox', { name: 'Password' }).fill('Test@123');
   await page.getByRole('button', { name: 'Login' }).click();
 

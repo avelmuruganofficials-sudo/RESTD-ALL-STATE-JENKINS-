@@ -10,7 +10,7 @@ test("Excel data based automation", async ({ page }) => {
   await page.waitForLoadState("networkidle");
   await page
     .getByRole("textbox", { name: "Email" })
-    .fill("divya@stepladdersolutions.com");
+    .fill("velmurugan@stepladdersolutions.com");
   await page.getByRole("textbox", { name: "Password" }).fill("Stepup@123");
   await page.getByRole("button", { name: "Login" }).click();
   // -------- Loop through Excel rows --------
