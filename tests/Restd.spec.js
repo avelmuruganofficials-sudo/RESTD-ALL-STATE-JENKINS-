@@ -5,19 +5,19 @@ const sheet = workbook.Sheets[workbook.SheetNames[0]];
 const data = xlsx.utils.sheet_to_json(sheet);
 test("Excel data based automation", async ({ page }) => {
   await page.goto("https://www.landydev.com/#/auth/login");
-  await page.waitForLoadState("networkidle");
+ await page.waitForLoadState("domcontentloaded");
   await page
     .getByRole("textbox", { name: "Email" })
     .fill("velmurugan@stepladdersolutions.com");
   await page.getByRole("textbox", { name: "Password" }).fill("Stepup@123");
   await page.getByRole("button", { name: "Login" }).click();
   // -------- Loop through Excel rows --------
-  for (let i = 1; i < data.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     const row = data[i];
     console.log(`Starting row ${i + 1}`);
     try {
       await page.goto("https://www.landydev.com/#/pages/riskPolicySearch");
-      await page.waitForLoadState("networkidle");
+     await page.waitForLoadState("domcontentloaded");
       await page.getByRole("button", { name: "New Application" }).click();
       await page.getByLabel("State").selectOption(row.State);
       await page.locator("#state").nth(1).selectOption(row.Lob);
@@ -97,13 +97,13 @@ test("Excel data based automation", async ({ page }) => {
       await page.getByRole("button", { name: "save & Close" }).click();
       await page.waitForTimeout(2000);
       await page.getByRole("button", { name: " Rate" }).click();
-      await page.waitForLoadState("networkidle");
+     await page.waitForLoadState("domcontentloaded");
       await page.locator("//tbody/tr[1]/td[2]/button[3]").click();
       const today = new Date().toISOString().split("T")[0];
       await page.locator("div input#minDate").fill(today);
       await page.locator("button#save").click();
       await page.locator("button#sendMail > span").click();
-      await page.waitForLoadState("networkidle");
+     await page.waitForLoadState("domcontentloaded");
       // const state = await page.locator('#state').inputValue();
       // if (state === 'NC') {
       //   const fileInput = page.locator("//input[@accept='application/pdf' and @id='file']");
@@ -123,7 +123,7 @@ test("Excel data based automation", async ({ page }) => {
       await page.waitForTimeout(3000);
       // ****************************Payment**************************
       await page.getByRole("link", { name: "Payment", exact: true }).click();
-      await page.waitForLoadState("networkidle");
+     await page.waitForLoadState("domcontentloaded");
       const balanceText = await page
         .locator("//ngx-payment-tab//tr[2]/td[9]")
         .innerText();
