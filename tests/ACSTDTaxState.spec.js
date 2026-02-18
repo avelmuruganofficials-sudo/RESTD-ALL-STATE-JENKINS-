@@ -1,0 +1,196 @@
+import { test, expect } from '@playwright/test';
+import xlsx from 'xlsx';
+// -------- Excel Read --------
+const workbook = xlsx.readFile('./tests/Data/AcstdAllState.xlsx');
+const sheetName = 'TaxState';
+const sheet = workbook.Sheets[sheetName];
+const data = xlsx.utils.sheet_to_json(sheet);
+test('Excel data based automation', async ({ page }) => {
+  // -------- Login (once) --------
+  await page.goto('https://www.landydev.com/#/auth/login');
+  await page.waitForLoadState('networkidle');
+  await page.getByRole('textbox', { name: 'Email' }).fill('velmurugan@stepladdersolutions.com');
+  await page.getByRole('textbox', { name: 'Password' }).fill('Test@123');
+  await page.getByRole('button', { name: 'Login' }).click();
+
+  for (let i = 2; i < data.length; i++) {
+    const row = data[i];
+    console.log(`Starting row ${i + 1} RiskId: ${row.RiskId}`);
+    try {
+      await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
+      await page.waitForLoadState('networkidle');
+      await page.getByRole('button', { name: '   New Application' }).click();
+      await page.getByLabel('State').selectOption(row.State);
+      await page.locator('#state').nth(1).selectOption(row.Lob);
+      const producer = page.getByRole('textbox', { name: 'Pick a producer' });
+      await producer.click();
+      await producer.type('hhl');
+      await page.waitForTimeout(3000);
+      await page.getByText('HHL01-A, Herbert H. Landy').click();
+      await page.getByRole('textbox', { name: 'Search Firm Name' }).click();
+      await page.getByRole('textbox', { name: 'Search Firm Name' }).type(row.FirmName);
+      const locationAL = page.getByRole('textbox', { name: 'Sizing example input' }).first();
+      await locationAL.click();
+      await locationAL.type(row.Location);
+      await page.waitForTimeout(3000);
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(3000);
+      await page.locator('input[name="effDate1"]').fill(new Date().toISOString().split('T')[0]);
+      await page.getByLabel('Retroactive Date ---Choose an').selectOption(row.PriorCheck);
+      await page.getByRole('button', { name: 'save & Close' }).click();
+      await page.getByText('Application Details').click();
+      await page.locator('select[name="typeOfFirmReId"]').selectOption(row.AppDetlTypeOfFirm);
+      await page.getByPlaceholder('Full Time CPA').click();
+      await page.getByPlaceholder('Full Time CPA').fill(row.AppDetlFullTimeProfessionals);
+      await page.locator('#grossRevenue').click();
+      await page.getByRole('textbox').first().press('ArrowLeft');
+      await page.getByRole('textbox').first().press('ArrowLeft');
+      await page.getByRole('textbox').first().press('ArrowLeft');
+      await page.locator('#grossRevenue').type(row.TotalGrossRevenues);
+      await page.getByRole('button', { name: 'save & Close' }).click();
+      await page.waitForTimeout(3000);
+      await page.getByText('Areas of Practice').click();
+      await page.locator("//td[contains(text(),'Audit Non-Public')]//following::input[1]").click();
+      await page.locator("//td[contains(text(),'Audit Non-Public')]//following::input[1]").type(row.Audit_Non_Public);
+      await page.getByRole('button', { name: 'save & Close' }).click();
+      await page.waitForTimeout(3000);
+      await page.locator('nb-accordion-item-header').filter({ hasText: 'Quote Selection &' }).click();
+      await page.locator('span').filter({ hasText: 'Pick a Limit' }).first().click();
+      await page.getByText(row.QutSelContLimit).click();
+      await page.locator('span').filter({ hasText: 'Pick a Deductible' }).first().click();
+      await page.getByText(row.QutSelContDeductible, { exact: true }).click();
+      await page.getByText('Pick a Limit Type').click();
+      await page.getByText(row.QutSelContLimitType).click();
+      await page.locator('span').filter({ hasText: 'Pick a Deductible Type' }).first().click();
+      await page.getByText(row.QutSelContDeductibleType, { exact: true }).click();
+      await page.getByRole('button', { name: 'save & Close' }).click();
+      await page.waitForTimeout(2000);
+      await page.getByRole('button', { name: ' Rate' }).click();
+      await page.waitForLoadState('networkidle');
+      await page.getByRole('button', { name: '   Re-Generate Sheets' }).click();
+      await page.waitForTimeout(3000);
+      await page.locator('//tbody/tr[2]/td[2]/button[3]').click();
+      await page.waitForTimeout(2000);
+      const today = new Date().toISOString().split('T')[0];
+      await page.locator('//*[@id="quoteDate"]').click();
+      await page.locator('//*[@id="quoteDate"]').fill(today);
+      await page.locator('button#save').click();
+      await page.locator('button#sendMail > span').click();
+      await page.waitForLoadState('networkidle');
+      await page.locator("div[class='col-sm-6 ng-star-inserted'] td[class='ng-star-inserted']").click();
+      await page.waitForTimeout(3000);
+      await page.locator('//*[@id="proceed"]').click();
+      await page.locator('//*[@id="accounting"]').click();
+      await page.waitForTimeout(3000);
+      await page.getByRole('link', { name: 'Payment', exact: true }).click();
+      const balanceText = await page.locator("span[class='ng-star-inserted'] b").innerText();
+      const balanceValue = balanceText
+        .replace('$', '')
+        .replace(/,/g, '')
+        .trim();
+      const paymentInput = page.locator('#paymentReceived3');
+      await paymentInput.click();
+      await paymentInput.press('Control+A');
+      await paymentInput.press('Backspace');
+      await paymentInput.pressSequentially(balanceValue, { delay: 100 });
+      await paymentInput.press('Tab');
+      await page.waitForTimeout(500);
+      await page.locator('#checkNumber').fill(row.Option);
+      await page.locator('#autofill').click();
+      await page.getByRole('button', { name: 'Save  & Issue' }).click();
+      // **********************************************************************************
+      await page.getByRole('button', { name: 'Okay' }).click();
+      await page.getByRole('link', { name: 'Notes' }).click();
+      await page.locator('//nb-tabset//ul/li[1]/a').click();
+      await page.locator('nb-accordion-item-header').filter({ hasText: 'Client Information' }).click();
+      const riskIdInput1 = page.locator("input[placeholder='Risk Id']");
+      await riskIdInput1.click();
+      await riskIdInput1.press('Control+A');
+      await riskIdInput1.press('Control+C');
+      await page.getByRole('link', { name: 'Accounting' }).click();
+      await page.getByRole('link', { name: 'Policy Queued' }).click();
+      await page.locator('#globalSearch').click();
+      await page.locator('#globalSearch').press('Control+V');
+      await page.locator('#search').first().click();
+      await page.locator("//ng2-smart-table//tbody/tr[1]/td[1]//input[@type='checkbox']").check();
+      await page.getByRole('button', { name: 'Issue Policy' }).click();
+      await page.getByRole('button', { name: 'Yes' }).click();
+      await page.waitForTimeout(3000);
+      await page.getByRole('link', { name: 'Accounting' }).click();
+      // ********************************Booking***************************************
+      await page.getByRole('link', { name: 'Accounting' }).click();
+      await page.getByRole('link', { name: 'Booking' }).click();
+      await page.waitForTimeout(3000);
+      await page.locator("//i[contains(@class,'ion-refresh')]").click();
+      await page.waitForTimeout(6000);
+      await page.locator("//i[@class='fa fa-file-pdf']").click();
+      await page.waitForTimeout(6000);
+      await page.locator("//i[contains(@class,'ion-refresh')]").click();
+      await page.waitForTimeout(6000);
+      await page.locator("//i[@class='fa fa-file-pdf']").click();
+      await page.waitForTimeout(6000);
+      await page.locator('#globalSearch').click();
+      await page.locator('#globalSearch').press('Control+V');
+      await page.locator('#search').first().click();
+      await page.waitForTimeout(5000);
+      await page.locator("//ng2-smart-table//tbody/tr[1]/td[1]//input[@type='checkbox']").check();
+      await page.getByRole('button', { name: 'Mark For Booking' }).click();
+      await page.getByRole('button', { name: 'Yes' }).click();
+      await page.getByRole('link').filter({ hasText: /^$/ }).nth(3).click();
+      await page.getByRole('button', { name: 'Yes' }).click();
+      await page.locator("//ng2-smart-table//tbody/tr[1]/td[7]//a").click();
+      await page.locator('#check-0-pending').check();
+      await page.getByRole('button', { name: 'Post' }).click();
+      await page.getByRole('button', { name: 'Yes' }).click();
+      // *****************************************Deposit********************************************
+      await page.getByRole('link', { name: 'Deposit' }).click();
+      await page.locator('#globalSearch').click();
+      await page.locator('#globalSearch').press('Control+V');
+      await page.locator('#search').first().click();
+      await page.locator("//ng2-smart-table//tbody/tr[1]/td[1]//input[@type='checkbox']").check();
+      await page.getByRole('button', { name: 'Mark For Deposit' }).click();
+      await page.getByRole('button', { name: 'Yes' }).click();
+      await page.goto('https://www.landydev.com/#/pages/depositBatchTab/DepositBatch');
+      await page.getByRole('link').filter({ hasText: /^$/ }).nth(3).click();
+      await page.getByRole('button', { name: 'Yes' }).click();
+      await page.locator("//ng2-smart-table//tbody/tr[1]/td[7]//a").click();
+      await page.locator('#check-0-pending').check();
+      await page.getByRole('button', { name: 'Post' }).click();
+      await page.getByRole('button', { name: 'Yes' }).click();
+      await page.getByRole('link', { name: 'Underwriting' }).click();
+      await page.locator('#globalSearch').click();
+      await page.locator('#globalSearch').press('Control+V');
+      await page.locator('#search').first().click();
+      await page.locator("//tr[@class='ng2-smart-row selected ng-star-inserted']").click();
+      await page.locator('//nb-tabset//ul/li[1]/a').click();
+      await page.getByRole('link', { name: 'Payment', exact: true }).click();
+      await page.getByRole('cell').filter({ hasText: /^$/ }).nth(2).click();
+      await page.waitForTimeout(3000);
+      await page.getByRole('cell').filter({ hasText: /^$/ }).nth(2).click();
+      await page.waitForTimeout(3000);
+      await page.getByRole('cell').filter({ hasText: /^$/ }).nth(3).click();
+      await page.waitForTimeout(3000);
+      await page.getByRole('cell').filter({ hasText: /^$/ }).nth(3).click();
+      await page.waitForTimeout(3000);
+      await page.getByRole('link', { name: 'Accounting' }).click();
+      // --- Optional: screenshot for success ---
+      await page.screenshot({ path: `row-${i + 1}-success.png` });
+      console.log({
+        row: i + 1,
+        RiskId: row.RiskId,
+        Status: 'SUCCESS'
+      });
+    } catch (error) {
+      console.error(` FAILED ROW ${i + 1} | RiskId: ${row.RiskId}`, error);
+      await page.screenshot({ path: `row-${i + 1}-error.png` });
+      continue; // move to next Excel row
+    }
+    // small delay between rows
+    await page.waitForTimeout(2000);
+  }
+
+});
+
