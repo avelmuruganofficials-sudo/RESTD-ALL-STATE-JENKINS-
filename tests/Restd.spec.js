@@ -3,7 +3,7 @@ import xlsx from "xlsx";
 const workbook = xlsx.readFile("./tests/Data/RestdAllState.xlsx");
 const sheet = workbook.Sheets[workbook.SheetNames[0]];
 const data = xlsx.utils.sheet_to_json(sheet);
-test("Excel data based automation", async ({ page }) => {
+test(`Excel row ${i + 1}`, async ({ page }) => {
   await page.goto("https://www.landydev.com/#/auth/login");
  await page.waitForLoadState("domcontentloaded");
   await page
@@ -13,6 +13,7 @@ test("Excel data based automation", async ({ page }) => {
   await page.getByRole("button", { name: "Login" }).click();
   // -------- Loop through Excel rows --------
   for (let i = 0; i < data.length; i++) {
+    
     const row = data[i];
     console.log(`Starting row ${i + 1}`);
     try {
