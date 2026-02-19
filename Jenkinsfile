@@ -55,15 +55,48 @@ pipeline {
             reportName: 'Playwright Report'
         ])
         }
-        success {
-        mail to: 'a.velmuruganofficials@gmail.com',
-             subject: "SUCCESS: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-             body: "Build succeeded.\nCheck details: ${env.BUILD_URL}"
-        }
-        failure {
-        mail to: 'a.velmuruganofficials@gmail.com',
-             subject: "FAILURE: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-             body: "Build failed.\nCheck details: ${env.BUILD_URL}"
+         success {
+        emailext(
+            subject: "✅ SUCCESS - Playwright Execution",
+            body: """
+                <h2>Playwright Execution Successful</h2>
+                <b>Build:</b> ${env.BUILD_NUMBER}<br><br>
+
+                <a href="${env.JOB_URL}lastBuild/Playwright%20Report/">
+                👉 View Report
+                </a>
+            """,
+            mimeType: 'text/html',
+            to: "a.velmuruganofficials@gmail.com"
+        )
+    }
+
+    failure {
+        emailext(
+            subject: "❌ FAILURE - Playwright Execution",
+            body: """
+                <h2>Playwright Execution Failed</h2>
+                <b>Build:</b> ${env.BUILD_NUMBER}<br><br>
+
+                <a href="${env.BUILD_URL}console">
+                👉 View Console Log
+                </a><br><br>
+
+                <a href="${env.BUILD_URL}Playwright%20Report/">
+                👉 View Report
+                </a>
+            """,
+            mimeType: 'text/html',
+            to: "a.velmuruganofficials@gmail.com"
+        )
+    }
+
+    aborted {
+        emailext(
+            subject: "⚠ ABORTED - Playwright Execution",
+            body: "Build was aborted.",
+            to: "a.velmuruganofficials@gmail.com"
+        )
     }
     }
 }
