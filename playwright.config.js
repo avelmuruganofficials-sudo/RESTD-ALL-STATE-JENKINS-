@@ -20,7 +20,7 @@ export default defineConfig({
 
     slowMo: 300,
     viewport: null,
-    headless: true,
+    headless: false,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'on'
