@@ -69,18 +69,17 @@ test('Excel data based automation', async ({ page }) => {
       await page.waitForLoadState('networkidle');
       await page.getByRole('cell', { name: '  ' }).locator('#quoteDateDialog').click();
       await page.waitForTimeout(3000);
-      await page.locator('//tbody/tr[2]/td[2]/button[3]').click();
-      await page.waitForTimeout(2000);
-      const today = new Date().toISOString().split('T')[0];
-      await page.locator('//*[@id="quoteDate"]').click();
-      await page.locator('//*[@id="quoteDate"]').fill(today);
-      await page.locator('button#save').click();
-      await page.locator('button#sendMail > span').click();
-      await page.waitForLoadState('networkidle');
-      await page.locator("div[class='col-sm-6 ng-star-inserted'] td[class='ng-star-inserted']").click();
+      await page.getByPlaceholder('MM/DD/YYYY').fill('2026-02-23');
       await page.waitForTimeout(3000);
-      await page.locator('//*[@id="proceed"]').click();
-      await page.locator('//*[@id="accounting"]').click();
+      await page.getByRole('button', { name: 'Save' }).click();
+      await page.waitForTimeout(3000);
+      await page.getByRole('button', { name: '  Send Email' }).click();
+      await page.waitForTimeout(3000);
+      await page.getByText('$ 7,164').click();
+      await page.waitForTimeout(3000);
+      await page.getByRole('button', { name: 'Proceed' }).click();
+      await page.waitForTimeout(3000);
+      await page.getByRole('button', { name: 'Accounting' }).click();
       await page.waitForTimeout(3000);
       // ****************************Payment**************************
       await page.getByRole('link', { name: 'Payment', exact: true }).click();

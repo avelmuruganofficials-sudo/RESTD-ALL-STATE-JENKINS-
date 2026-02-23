@@ -1,5 +1,73 @@
 import { test, expect } from '@playwright/test';
 
 test('test', async ({ page }) => {
-  // Recording...
+await page.goto('https://www.landydev.com/#/auth/login');
+await page.getByRole('textbox', { name: 'Email' }).click();
+await page.getByRole('textbox', { name: 'Email' }).fill('velmurugan@stepladdersolutions.com');
+await page.getByRole('textbox', { name: 'Password' }).click();
+await page.getByRole('textbox', { name: 'Password' }).fill('Test@123');
+await page.getByRole('button', { name: 'Login' }).click();
+await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
+await page.getByRole('button', { name: '   New Application' }).click();
+await page.getByLabel('State').selectOption('AL');
+await page.locator('#state').nth(1).selectOption('ACSTD');
+await page.getByRole('textbox', { name: 'Pick a producer' }).click();
+await page.getByRole('textbox', { name: 'Pick a producer' }).fill('hhl');
+await page.getByText('HHL01-A, Herbert H. Landy').click();
+await page.getByRole('textbox', { name: 'Search Firm Name' }).click();
+await page.getByRole('textbox', { name: 'Search Firm Name' }).fill('Playwright Test');
+await page.getByRole('textbox', { name: 'Sizing example input' }).first().click();
+await page.getByRole('textbox', { name: 'Sizing example input' }).first().fill('alaba');
+await page.getByText('Alabama State UniversitySouth').click();
+
+await page.getByRole('button', { name: 'Save & Continue' }).click();
+await page.locator('select[name="typeOfFirmReId"]').selectOption('1');
+await page.getByPlaceholder('Full Time CPA').click();
+await page.getByPlaceholder('Full Time CPA').fill('13');
+await page.getByRole('textbox', { name: '$' }).click();
+await page.getByRole('textbox', { name: '$' }).press('ArrowLeft');
+await page.getByRole('textbox', { name: '$' }).press('ArrowLeft');
+await page.getByRole('textbox', { name: '$' }).press('ArrowLeft');
+await page.getByRole('button', { name: 'Save & Continue' }).click();
+await page.getByRole('row', { name: 'Audit Non-Public 0.9' }).locator('#value').click();
+await page.getByRole('row', { name: 'Audit Non-Public 0.9' }).locator('#value').fill('100');
+await page.getByRole('button', { name: 'Save & Continue' }).click();
+await page.getByRole('button', { name: 'Save & Continue' }).click();
+await page.locator('nb-accordion-item-header').filter({ hasText: 'Quote Selection &' }).click();
+await page.locator('span').filter({ hasText: 'Pick a Limit' }).first().click();
+await page.getByText('$ 500,000 / $ 500,000').click();
+await page.locator('span').filter({ hasText: 'Pick a Deductible' }).first().click();
+await page.getByText('$ 5,000', { exact: true }).click();
+await page.getByText('Pick a Limit Type').click();
+await page.getByText('% CEIL').click();
+await page.getByText('Pick a Deductible Type').click();
+await page.getByRole('listitem').filter({ hasText: /^Loss Only$/ }).click();
+await page.getByRole('button', { name: 'Save & Continue' }).click();
+await page.getByRole('button', { name: 'Save & Continue' }).click();
+await page.getByRole('button', { name: ' Rate' }).click();
+await page.getByRole('cell', { name: '  ' }).locator('#quoteDateDialog').click();
+await page.getByPlaceholder('MM/DD/YYYY').fill('2026-02-23');
+await page.getByRole('button', { name: 'Save' }).click();
+await page.getByRole('button', { name: '  Send Email' }).click();
+await page.getByText('$ 9,759').click();
+await page.getByRole('button', { name: 'Proceed' }).click();
+await page.getByRole('button', { name: 'Accounting' }).click();
+await page.getByRole('link', { name: 'Payment', exact: true }).click();
+await page.locator('#paymentReceived3').click();
+await page.locator('#paymentReceived3').press('ArrowLeft');
+await page.locator('#paymentReceived3').press('ArrowLeft');
+await page.locator('#paymentReceived3').press('ArrowLeft');
+await page.locator('#checkNumber').click();
+await page.locator('#checkNumber').fill('963852');
+await page.getByRole('button', { name: 'Autofill  ($9,759.00)' }).click();
+await page.getByRole('button', { name: 'Save  & Issue' }).click();
+await page.getByRole('button', { name: 'Okay' }).click();
+await page.getByRole('link', { name: 'Accounting' }).click();
+await page.getByRole('link', { name: 'Policy Queued' }).click();
+await page.getByRole('row', { name: 'ACSTD AL PLAY003 Playwright' }).getByRole('checkbox').check();
+await page.getByRole('button', { name: 'Issue Policy' }).click();
+await page.getByRole('button', { name: 'Yes' }).click();
+await page.getByRole('button', { name: 'Yes' }).click();
+
+
 });
