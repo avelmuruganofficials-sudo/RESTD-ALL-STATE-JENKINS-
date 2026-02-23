@@ -67,7 +67,7 @@ test('Excel data based automation', async ({ page }) => {
       await page.waitForTimeout(2000);
       await page.getByRole('button', { name: ' Rate' }).click();
       await page.waitForLoadState('networkidle');
-      await page.getByRole('button', { name: '   Re-Generate Sheets' }).click();
+      await page.getByRole('cell', { name: '  ' }).locator('#quoteDateDialog').click();
       await page.waitForTimeout(3000);
       await page.locator('//tbody/tr[2]/td[2]/button[3]').click();
       await page.waitForTimeout(2000);
