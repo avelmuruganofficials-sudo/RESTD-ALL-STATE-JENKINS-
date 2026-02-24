@@ -100,7 +100,7 @@ test('Excel data based automation', async ({ page }) => {
       await page.locator('#search').first().click();
       await page.locator("//ng2-smart-table//tbody/tr[1]/td[1]//input[@type='checkbox']").check();
       await page.getByRole('button', { name: 'Issue Policy' }).click();
-      await page.getByRole('button', { name: 'Yes' }).click(); s
+      await page.getByRole('button', { name: 'Yes' }).click(); 
       await page.waitForTimeout(3000);
       await page.getByRole('link', { name: 'Accounting' }).click();
       // ********************************Booking***************************************
