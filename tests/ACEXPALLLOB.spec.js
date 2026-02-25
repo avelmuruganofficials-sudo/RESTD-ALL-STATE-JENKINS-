@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import xlsx from 'xlsx';
-const workbook = xlsx.readFile('./tests/Data/AcstdAllState.xlsx');
+const workbook = xlsx.readFile('./tests/Data/ACEXPAllState.xlsx');
 const sheet = workbook.Sheets[workbook.SheetNames[0]];
 const data = xlsx.utils.sheet_to_json(sheet);
 test('Excel data based automation', async ({ page }) => {
@@ -9,13 +9,14 @@ test('Excel data based automation', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Email' }).fill('velmurugan@stepladdersolutions.com');
   await page.getByRole('textbox', { name: 'Password' }).fill('Test@123');
   await page.getByRole('button', { name: 'Login' }).click();
-for (let i = 0; i < data.length; i++) {
-    
-    const row = data[i];
+
+  for (let i = 13; i < data.length; i++) {
+     const row = data[i];
     console.log(`Starting row ${i + 1}`);
     try {
       await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
-      await page.waitForLoadState('networkidle');
+      // await page.waitForLoadState('networkidle');
+      await page.waitForTimeout(3000);
       await page.getByRole('button', { name: '   New Application' }).click();
       await page.getByLabel('State').selectOption(row.State);
       await page.locator('#state').nth(1).selectOption(row.Lob);
@@ -35,56 +36,40 @@ for (let i = 0; i < data.length; i++) {
       await page.keyboard.press('ArrowDown');
       await page.keyboard.press('Enter');
       await page.waitForTimeout(3000);
-      await page.locator('input[name="effDate1"]').fill(new Date().toISOString().split('T')[0]);
+      await page.locator('#effDate2').fill(new Date().toISOString().split('T')[0]);
       await page.getByLabel('Retroactive Date ---Choose an').selectOption(row.PriorCheck);
       await page.getByRole('button', { name: 'save & Close' }).click();
-      await page.getByText('Application Details').click();
-      await page.locator('select[name="typeOfFirmReId"]').selectOption(row.AppDetlTypeOfFirm);
-      await page.getByPlaceholder('Full Time CPA').click();
-      await page.getByPlaceholder('Full Time CPA').fill(row.AppDetlFullTimeProfessionals);
-      await page.locator('#grossRevenue').click();
-      await page.getByRole('textbox').first().press('ArrowLeft');
-      await page.getByRole('textbox').first().press('ArrowLeft');
-      await page.getByRole('textbox').first().press('ArrowLeft');
-      await page.locator('#grossRevenue').type(row.TotalGrossRevenues);
+      await page.locator('nb-accordion-item-header').filter({ hasText: 'Application Details' }).click();
+      await page.getByPlaceholder('Total No of Professionals').click();
+      await page.locator('#totNoOfProf').fill(row.AppDetlFullTimeProfessionals);
+      await page.locator('body > ngx-app:nth-child(2) > ngx-pages:nth-child(2) > ngx-one-column-layout:nth-child(1) > nb-layout:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > nb-layout-column:nth-child(1) > ngx-underwriter:nth-child(2) > div:nth-child(1) > nb-card:nth-child(1) > nb-tabset:nth-child(2) > nb-tab:nth-child(2) > div:nth-child(1) > div:nth-child(1) > nb-stepper:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > nb-accordion:nth-child(1) > nb-accordion-item:nth-child(2) > nb-accordion-item-body:nth-child(2) > div:nth-child(1) > div:nth-child(1) > ngx-ai-acc-e:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > input:nth-child(1)').click();
+      await page.getByRole('textbox', { name: 'Sizing example input' }).first().press('ArrowLeft');
+      await page.getByRole('textbox', { name: 'Sizing example input' }).first().press('ArrowLeft');
+      await page.getByRole('textbox', { name: 'Sizing example input' }).first().press('ArrowLeft');
+      await page.locator('body > ngx-app:nth-child(2) > ngx-pages:nth-child(2) > ngx-one-column-layout:nth-child(1) > nb-layout:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > nb-layout-column:nth-child(1) > ngx-underwriter:nth-child(2) > div:nth-child(1) > nb-card:nth-child(1) > nb-tabset:nth-child(2) > nb-tab:nth-child(2) > div:nth-child(1) > div:nth-child(1) > nb-stepper:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > nb-accordion:nth-child(1) > nb-accordion-item:nth-child(2) > nb-accordion-item-body:nth-child(2) > div:nth-child(1) > div:nth-child(1) > ngx-ai-acc-e:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > input:nth-child(1)').type(row.CurrentFiscalYear);
+      await page.waitForTimeout(3000);
+      await page.locator('body > ngx-app:nth-child(2) > ngx-pages:nth-child(2) > ngx-one-column-layout:nth-child(1) > nb-layout:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > nb-layout-column:nth-child(1) > ngx-underwriter:nth-child(2) > div:nth-child(1) > nb-card:nth-child(1) > nb-tabset:nth-child(2) > nb-tab:nth-child(2) > div:nth-child(1) > div:nth-child(1) > nb-stepper:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > nb-accordion:nth-child(1) > nb-accordion-item:nth-child(2) > nb-accordion-item-body:nth-child(2) > div:nth-child(1) > div:nth-child(1) > ngx-ai-acc-e:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(2) > div:nth-child(1) > input:nth-child(1)').click();
+      await page.getByRole('textbox', { name: 'Sizing example input' }).nth(1).press('ArrowLeft');
+      await page.getByRole('textbox', { name: 'Sizing example input' }).nth(1).press('ArrowLeft');
+      await page.getByRole('textbox', { name: 'Sizing example input' }).nth(1).press('ArrowLeft');
+      await page.locator('body > ngx-app:nth-child(2) > ngx-pages:nth-child(2) > ngx-one-column-layout:nth-child(1) > nb-layout:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > nb-layout-column:nth-child(1) > ngx-underwriter:nth-child(2) > div:nth-child(1) > nb-card:nth-child(1) > nb-tabset:nth-child(2) > nb-tab:nth-child(2) > div:nth-child(1) > div:nth-child(1) > nb-stepper:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > nb-accordion:nth-child(1) > nb-accordion-item:nth-child(2) > nb-accordion-item-body:nth-child(2) > div:nth-child(1) > div:nth-child(1) > ngx-ai-acc-e:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(2) > div:nth-child(1) > input:nth-child(1)').type(row.LastFiscalYear);
+      await page.waitForTimeout(3000);
+      await page.locator('body > ngx-app:nth-child(2) > ngx-pages:nth-child(2) > ngx-one-column-layout:nth-child(1) > nb-layout:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > nb-layout-column:nth-child(1) > ngx-underwriter:nth-child(2) > div:nth-child(1) > nb-card:nth-child(1) > nb-tabset:nth-child(2) > nb-tab:nth-child(2) > div:nth-child(1) > div:nth-child(1) > nb-stepper:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > nb-accordion:nth-child(1) > nb-accordion-item:nth-child(2) > nb-accordion-item-body:nth-child(2) > div:nth-child(1) > div:nth-child(1) > ngx-ai-acc-e:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(6) > div:nth-child(2) > div:nth-child(1) > input:nth-child(1)').click();
+      await page.getByRole('textbox', { name: 'Sizing example input' }).nth(2).press('ArrowLeft');
+      await page.getByRole('textbox', { name: 'Sizing example input' }).nth(2).press('ArrowLeft');
+      await page.getByRole('textbox', { name: 'Sizing example input' }).nth(2).press('ArrowLeft');
+      await page.locator('body > ngx-app:nth-child(2) > ngx-pages:nth-child(2) > ngx-one-column-layout:nth-child(1) > nb-layout:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > nb-layout-column:nth-child(1) > ngx-underwriter:nth-child(2) > div:nth-child(1) > nb-card:nth-child(1) > nb-tabset:nth-child(2) > nb-tab:nth-child(2) > div:nth-child(1) > div:nth-child(1) > nb-stepper:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > nb-accordion:nth-child(1) > nb-accordion-item:nth-child(2) > nb-accordion-item-body:nth-child(2) > div:nth-child(1) > div:nth-child(1) > ngx-ai-acc-e:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(6) > div:nth-child(2) > div:nth-child(1) > input:nth-child(1)').type(row.PreviousFiscalYear);
       await page.getByRole('button', { name: 'save & Close' }).click();
-      await page.waitForTimeout(3000);
-      await page.getByText('Areas of Practice').click();
-      await page.getByRole('row', { name: 'Audit Non-Public 0.9' }).locator('#value').click();
-      await page.getByRole('row', { name: 'Audit Non-Public 0.9' }).locator('#value').fill('100');
-      await page.getByRole('button', { name: 'save & Close' }).click();
-      await page.waitForTimeout(3000);
-      await page.locator('nb-accordion-item-header').filter({ hasText: 'Quote Selection &' }).click();
-      await page.locator('span').filter({ hasText: 'Pick a Limit' }).first().click();
-      await page.getByText(row.QutSelContLimit).click();
-      await page.locator('span').filter({ hasText: 'Pick a Deductible' }).first().click();
-      await page.getByText(row.QutSelContDeductible, { exact: true }).click();
-      await page.getByText('Pick a Limit Type').click();
-      await page.getByText(row.QutSelContLimitType).click();
-      await page.locator('span').filter({ hasText: 'Pick a Deductible Type' }).first().click();
-      await page.getByText(row.QutSelContDeductibleType, { exact: true }).click();
-      await page.getByRole('button', { name: 'save & Close' }).click();
-      await page.waitForTimeout(2000);
-      await page.getByRole('button', { name: ' Rate' }).click();
-      await page.waitForLoadState('networkidle');
-      await page.getByRole('cell', { name: '  ' }).locator('#quoteDateDialog').click();
-      await page.waitForTimeout(3000);
-      await page.getByPlaceholder('MM/DD/YYYY').fill('2026-02-23');
-      await page.waitForTimeout(3000);
-      await page.getByRole('button', { name: 'Save' }).click();
-      await page.waitForTimeout(3000);
-      await page.getByRole('button', { name: '  Send Email' }).click();
-      await page.waitForTimeout(3000);
-      await page.getByText('$ 7,164').click();
+      await page.getByRole('button', { name: ' Next' }).click();
+      await page.locator("//tr[2]//td[9]//div[1]").click();
       await page.waitForTimeout(3000);
       await page.getByRole('button', { name: 'Proceed' }).click();
-      await page.waitForTimeout(3000);
       await page.getByRole('button', { name: 'Accounting' }).click();
-      await page.waitForTimeout(3000);
       // ****************************Payment**************************
       await page.getByRole('link', { name: 'Payment', exact: true }).click();
       await page.waitForLoadState('networkidle');
-      const balanceText = await page.locator("//ngx-payment-tab//tr[2]/td[9]").innerText();
+      // const balanceText = await page.locator("//ngx-payment-tab//tr[2]/td[9]").innerText();
+      const balanceText = await page.locator("span[class='ng-star-inserted'] b").innerText();
       const balanceValue = balanceText
         .replace('$', '')
         .replace(/,/g, '')
@@ -115,20 +100,19 @@ for (let i = 0; i < data.length; i++) {
       await page.locator('#search').first().click();
       await page.locator("//ng2-smart-table//tbody/tr[1]/td[1]//input[@type='checkbox']").check();
       await page.getByRole('button', { name: 'Issue Policy' }).click();
-      await page.getByRole('button', { name: 'Yes' }).click();
+      await page.getByRole('button', { name: 'Yes' }).click(); 
       await page.waitForTimeout(3000);
-      // await page.getByRole('link', { name: 'Accounting' }).click();
-      // // ********************************Booking***************************************
+      await page.getByRole('link', { name: 'Accounting' }).click();
+      // ********************************Booking***************************************
       // await page.getByRole('link', { name: 'Accounting' }).click();
       // await page.getByRole('link', { name: 'Booking' }).click();
       // await page.waitForTimeout(3000);
       // await page.locator("//i[contains(@class,'ion-refresh')]").click();
-      // await page.waitForTimeout(6000);
+      // await page.waitForLoadState('networkidle');
       // await page.locator("//i[@class='fa fa-file-pdf']").click();
       // await page.waitForTimeout(6000);
       // await page.locator("//i[contains(@class,'ion-refresh')]").click();
-      // await page.waitForTimeout(6000);
-      // await page.locator('#globalSearch').click();
+      // await page.waitForLoadState('networkidle');
       // await page.locator('#globalSearch').press('Control+V');
       // await page.locator('#search').first().click();
       // await page.waitForTimeout(5000);
@@ -142,7 +126,7 @@ for (let i = 0; i < data.length; i++) {
       // await page.getByRole('button', { name: 'Post' }).click();
       // await page.getByRole('button', { name: 'Yes' }).click();
 
-      // // *****************************************Deposit********************************************
+      // *****************************************Deposit********************************************
       // await page.getByRole('link', { name: 'Deposit' }).click();
       // await page.locator('#globalSearch').click();
       // await page.locator('#globalSearch').press('Control+V');
@@ -186,9 +170,3 @@ for (let i = 0; i < data.length; i++) {
     await page.waitForTimeout(2000);
   }
 });
-
-
-
-
-
-
