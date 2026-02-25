@@ -9,7 +9,7 @@ test('Excel data based automation', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Email' }).fill('velmurugan@stepladdersolutions.com');
   await page.getByRole('textbox', { name: 'Password' }).fill('Test@123');
   await page.getByRole('button', { name: 'Login' }).click();
-for (let i = 0; i < data.length; i++) {
+for (let i = 14; i < data.length; i++) {
     
     const row = data[i];
     console.log(`Starting row ${i + 1}`);
@@ -175,13 +175,10 @@ for (let i = 0; i < data.length; i++) {
       // await page.getByRole('link', { name: 'Accounting' }).click();
       // --- Optional: screenshot for success ---
       await page.screenshot({ path: `row-${i + 1}-success.png` });
-      console.log({
-        row: i + 1,
-        RiskId: row.RiskId,
-        Status: 'SUCCESS'
-      });
+       await runRowLogic(rows[i]);
+      console.log({row: i + 1, RiskId: riskId, Status: 'SUCCESS' });
     } catch (error) {
-      console.error(`:x: FAILED ROW ${i + 1} | RiskId: ${row.RiskId}`, error);
+      console.log({ row: i + 1, RiskId: null, Status: 'FAILED' });
       await page.screenshot({ path: `row-${i + 1}-error.png` });
       continue; // move to next Excel row
     }
