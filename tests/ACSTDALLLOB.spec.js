@@ -175,10 +175,13 @@ for (let i = 0; i < data.length; i++) {
       // await page.getByRole('link', { name: 'Accounting' }).click();
       // --- Optional: screenshot for success ---
       await page.screenshot({ path: `row-${i + 1}-success.png` });
-       await runRowLogic(rows[i]);
-      console.log({row: i + 1, RiskId: riskId, Status: 'SUCCESS' });
+      console.log({
+        row: i + 1,
+        RiskId: row.RiskId,
+        Status: "SUCCESS",
+      });
     } catch (error) {
-      console.log({ row: i + 1, RiskId: null, Status: 'FAILED' });
+      console.error(`:x: FAILED ROW ${i + 1} | RiskId: ${row.RiskId}`, error);
       await page.screenshot({ path: `row-${i + 1}-error.png` });
       continue; // move to next Excel row
     }
