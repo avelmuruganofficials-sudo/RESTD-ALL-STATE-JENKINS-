@@ -10,9 +10,9 @@ test('Excel data based automation', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Password' }).fill('Test@123');
   await page.getByRole('button', { name: 'Login' }).click();
 
-  for (let i =0; i < data.length; i++) {
+  for (let i =1; i <= totalRows; i++) {
      const row = data[i];
-    console.log(`Starting row ${i + 1}`);
+    console.log(`Starting row ${i}`);
     try {
       await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
       // await page.waitForLoadState('networkidle');
@@ -158,16 +158,16 @@ test('Excel data based automation', async ({ page }) => {
       // await page.waitForTimeout(3000);
       // await page.getByRole('link', { name: 'Accounting' }).click();
       // --- Optional: screenshot for success ---
-   await page.screenshot({ path: `row-${i + 1}-success.png` });
-      console.log({
-        row: i + 1,
-        RiskId: row.RiskId,
-        Status: "SUCCESS",
-      });
+   const riskId = await page.locator('#riskId').textContent();
+   console.log({ row: i, RiskId: riskId, Status: 'SUCCESS' });
     } catch (error) {
-      console.error(`:x: FAILED ROW ${i + 1} | RiskId: ${row.RiskId}`, error);
-      await page.screenshot({ path: `row-${i + 1}-error.png` });
-      continue; // move to next Excel row
+      console.log(`Row ${i} FAILED. Skipping to next row...`);
+      console.log(error.message);
+      // Optional: take screenshot for failed row
+      await page.screenshot({ path: `error-row-${i}.png` });
+     // Optional: reload page before next row
+      await page.reload();
+      continue;  // 🔥 This is important — moves to next row
     }
     // small delay between rows
     await page.waitForTimeout(2000);
