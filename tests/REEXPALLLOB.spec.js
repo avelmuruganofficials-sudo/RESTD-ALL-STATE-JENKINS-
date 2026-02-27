@@ -19,10 +19,8 @@ test('Excel data based automation', async ({ page }) => {
         (async () => {
       await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
       // await page.waitForLoadState('networkidle');
-      await page.locator('.cdk-overlay-backdrop').waitFor({ state: 'hidden', timeout: 10000 }).catch(() => {});
       await page.getByRole('button', { name: '   New Application' }).click();
        await newAppBtn.waitFor({ state: 'visible', timeout: 20000 });
-          await newAppBtn.click({ timeout: 20000 });
       await page.getByLabel('State').selectOption(row.State);
       await page.locator('#state').nth(1).selectOption(row.Lob);
       const producer = page.getByRole('textbox', { name: 'Pick a producer' });
