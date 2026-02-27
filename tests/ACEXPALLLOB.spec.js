@@ -10,7 +10,7 @@ test('Excel data based automation', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Password' }).fill('Test@123');
   await page.getByRole('button', { name: 'Login' }).click();
 
-  for (let i =16; i <= totalRows; i++) {
+  for (let i =16; i < data.length; i++) {
      const row = data[i];
     console.log(`Starting row ${i}`);
     try {
