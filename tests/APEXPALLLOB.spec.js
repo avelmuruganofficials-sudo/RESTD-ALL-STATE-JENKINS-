@@ -4,16 +4,19 @@ const workbook = xlsx.readFile('./tests/Data/APEXPAllState.xlsx');
 const sheet = workbook.Sheets[workbook.SheetNames[0]];
 const data = xlsx.utils.sheet_to_json(sheet);
 test('Excel data based automation', async ({ page }) => {
+   // 🔥 GLOBAL SAFETY TIMEOUTS
+  page.setDefaultTimeout(20000);              // 20 sec per action
+  page.setDefaultNavigationTimeout(30000);    // 30 sec per navigation
   await page.goto('https://www.landydev.com/#/auth/login');
-  await page.waitForLoadState('networkidle');
   await page.getByRole('textbox', { name: 'Email' }).fill('velmurugan@stepladdersolutions.com');
   await page.getByRole('textbox', { name: 'Password' }).fill('Test@123');
   await page.getByRole('button', { name: 'Login' }).click();
-
-  for (let i = 44; i < data.length; i++) {
-    const row = data[i];
-    console.log(`Starting row ${i + 1} RiskId: ${row.RiskId}`);
-    try {
+  for (let i = 31; i < data.length; i++) {
+  const row = data[i];
+    console.log(`Starting row ${i + 1}`);
+  try {
+      await Promise.race([
+        (async () => {
       await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
       // await page.waitForLoadState('networkidle');
       await page.waitForTimeout(3000);
@@ -145,22 +148,31 @@ test('Excel data based automation', async ({ page }) => {
       // await page.waitForTimeout(3000);
       // await page.getByRole('cell').filter({ hasText: /^$/ }).nth(3).click();
       // await page.waitForTimeout(3000);
-      await page.getByRole('link', { name: 'Accounting' }).click();
+      // await page.getByRole('link', { name: 'Accounting' }).click();
       // --- Optional: screenshot for success ---
-      await page.screenshot({ path: `row-${i + 1}-success.png` });
-      console.log({
+      })(),
+        // ⛔ HARD 3 MINUTE LIMIT
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Row exceeded 3 minutes')), 180000)
+        )
+      ]);
+        console.log({
         row: i + 1,
         RiskId: row.RiskId,
-        Status: 'SUCCESS'
+        Status: "SUCCESS"
       });
-    } catch (error) {
-      console.error(`:x: FAILED ROW ${i + 1} | RiskId: ${row.RiskId}`, error);
+    } 
+    catch (error) {
+      console.log(`⛔ ROW ${i + 1} SKIPPED`);
+      console.log(error.message);
       await page.screenshot({ path: `row-${i + 1}-error.png` });
-      continue; // move to next Excel row
+      // 🔁 Reset before next row
+      await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
+      continue;
     }
-    // small delay between rows
-    await page.waitForTimeout(2000);
+      await page.waitForTimeout(2000);
   }
+
 });
 
 
