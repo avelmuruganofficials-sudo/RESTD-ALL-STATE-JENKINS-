@@ -15,7 +15,6 @@ test('Excel data based automation', async ({ page }) => {
   const row = data[i];
     console.log(`Starting row ${i + 1}`);
   try {
-
       await Promise.race([
         (async () => {
           await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
