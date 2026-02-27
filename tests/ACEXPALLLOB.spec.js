@@ -1,27 +1,20 @@
 import { test, expect } from '@playwright/test';
 import xlsx from 'xlsx';
-
 const workbook = xlsx.readFile('./tests/Data/ACEXPAllState.xlsx');
 const sheet = workbook.Sheets[workbook.SheetNames[0]];
 const data = xlsx.utils.sheet_to_json(sheet);
-
 test('Excel data based automation', async ({ page }) => {
-
-  // 🔥 GLOBAL SAFETY TIMEOUTS
+   // 🔥 GLOBAL SAFETY TIMEOUTS
   page.setDefaultTimeout(20000);              // 20 sec per action
   page.setDefaultNavigationTimeout(30000);    // 30 sec per navigation
-
   await page.goto('https://www.landydev.com/#/auth/login');
   await page.getByRole('textbox', { name: 'Email' }).fill('velmurugan@stepladdersolutions.com');
   await page.getByRole('textbox', { name: 'Password' }).fill('Test@123');
   await page.getByRole('button', { name: 'Login' }).click();
-
-  for (let i = 14; i < data.length; i++) {
-
-    const row = data[i];
+  for (let i = 0; i < data.length; i++) {
+  const row = data[i];
     console.log(`Starting row ${i + 1}`);
-
-    try {
+  try {
 
       await Promise.race([
         (async () => {
@@ -168,41 +161,27 @@ test('Excel data based automation', async ({ page }) => {
       // await page.getByRole('cell').filter({ hasText: /^$/ }).nth(3).click();
       // await page.waitForTimeout(3000);
       // await page.getByRole('link', { name: 'Accounting' }).click();
-        await page.screenshot({ path: `row-${i + 1}-success.png` });
-      console.log({
-        row: i + 1,
-        RiskId: row.RiskId,
-        Status: "SUCCESS",
-      });
-         })(),
-
+       })(),
         // ⛔ HARD 3 MINUTE LIMIT
         new Promise((_, reject) =>
           setTimeout(() => reject(new Error('Row exceeded 3 minutes')), 180000)
         )
-
       ]);
-
-      console.log({
+        console.log({
         row: i + 1,
         RiskId: row.RiskId,
         Status: "SUCCESS"
       });
-
-    } catch (error) {
-
+    } 
+    catch (error) {
       console.log(`⛔ ROW ${i + 1} SKIPPED`);
       console.log(error.message);
-
       await page.screenshot({ path: `row-${i + 1}-error.png` });
-
       // 🔁 Reset before next row
       await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
-
       continue;
     }
-
-    await page.waitForTimeout(2000);
+      await page.waitForTimeout(2000);
   }
 
 });
