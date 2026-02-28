@@ -5,8 +5,8 @@ const sheet = workbook.Sheets[workbook.SheetNames[0]];
 const data = xlsx.utils.sheet_to_json(sheet);
 test('Excel data based automation', async ({ page }) => {
   // 🔥 GLOBAL SAFETY TIMEOUTS
-  page.setDefaultTimeout(60000);            //60 sec per action
-  page.setDefaultNavigationTimeout(60000);    // 60 sec per navigation
+  page.setDefaultTimeout(2000);            //20 sec per action
+  page.setDefaultNavigationTimeout(3000);    // 30 sec per navigation
   await page.goto('https://www.landydev.com/#/auth/login');
   await page.getByRole('textbox', { name: 'Email' }).fill('velmurugan@stepladdersolutions.com');
   await page.getByRole('textbox', { name: 'Password' }).fill('Test@123');
@@ -92,7 +92,7 @@ test('Excel data based automation', async ({ page }) => {
           await page.locator('#search').first().click();
           await page.locator("//ng2-smart-table//tbody/tr[1]/td[1]//input[@type='checkbox']").check();
           await page.getByRole('button', { name: 'Issue Policy' }).click();
-          await page.getByRole('button', { name: 'Yes' }).click(); s
+          await page.getByRole('button', { name: 'Yes' }).click(); 
           await page.waitForTimeout(3000);
           await page.getByRole('link', { name: 'Accounting' }).click();
           // ********************************Booking***************************************
@@ -172,7 +172,7 @@ test('Excel data based automation', async ({ page }) => {
     }
     await page.waitForTimeout(2000);
   }
-
+  
 });
 
 
