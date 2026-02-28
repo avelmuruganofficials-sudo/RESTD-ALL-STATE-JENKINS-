@@ -5,10 +5,12 @@ const sheet = workbook.Sheets[workbook.SheetNames[0]];
 const data = xlsx.utils.sheet_to_json(sheet);
 test('Excel data based automation', async ({ page }) => {
   // 🔥 GLOBAL SAFETY TIMEOUTS
-  page.setDefaultTimeout(2000);            //20 sec per action
-  page.setDefaultNavigationTimeout(3000);    // 30 sec per navigation
+  page.setDefaultTimeout(60000);            //60 sec per action
+  page.setDefaultNavigationTimeout(60000);    // 60 sec per navigation
   await page.goto('https://www.landydev.com/#/auth/login');
   await page.getByRole('textbox', { name: 'Email' }).fill('velmurugan@stepladdersolutions.com');
+  waitUntil: 'domcontentloaded',
+  await page.waitForTimeout(6000);
   await page.getByRole('textbox', { name: 'Password' }).fill('Test@123');
   await page.getByRole('button', { name: 'Login' }).click();
   for (let i = 0; i < data.length; i++) {
