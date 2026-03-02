@@ -15,7 +15,7 @@ pipeline {
 
     options {
     timestamps()
-    timeout(time: 1, unit: 'HOURS')
+    timeout(time: 2, unit: 'HOURS')
     }
 
     stages {
@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Run Playwright Tests') {
             steps {
-                bat 'npx playwright test  tests/APEXPALLLOB.spec.js tests/REEXPALLLOB.spec.js --headed --workers=2'
+                bat 'npx playwright test  tests/APEXPALLLOB.spec.js tests/REEXPALLLOB.spec.js tests/ACEXPALLLOB.spec.js--headed --workers=1'
             }
         }
     }
