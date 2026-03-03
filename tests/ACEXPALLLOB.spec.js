@@ -18,7 +18,7 @@ test('Excel data based automation', async ({ page }) => {
       await Promise.race([
         (async () => {
           await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
-         await page.waitForLoadState('networkidle');
+          await page.waitForLoadState('networkidle');
           await page.waitForTimeout(3000);
           await page.getByRole('button', { name: '   New Application' }).click();
           await newAppBtn.waitFor({ state: 'visible', timeout: 20000 });
