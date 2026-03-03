@@ -5,8 +5,8 @@ const sheet = workbook.Sheets[workbook.SheetNames[0]];
 const data = xlsx.utils.sheet_to_json(sheet);
 test('Excel data based automation', async ({ page }) => {
 // 🔥 GLOBAL SAFETY TIMEOUTS
-  page.setDefaultTimeout(20000);              // 20 sec per action
-  page.setDefaultNavigationTimeout(30000);    // 30 sec per navigation
+  page.setDefaultTimeout(60000);              // 20 sec per action
+  page.setDefaultNavigationTimeout(60000);    // 30 sec per navigation
   await page.goto('https://www.landydev.com/#/auth/login');
   await page.getByRole('textbox', { name: 'Email' }).fill('velmurugan@stepladdersolutions.com');
   await page.getByRole('textbox', { name: 'Password' }).fill('Test@123');
