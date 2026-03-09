@@ -160,7 +160,7 @@ test('Excel data based automation', async ({ page }) => {
           // await page.getByRole('cell').filter({ hasText: /^$/ }).nth(3).click();
           // await page.waitForTimeout(3000);
           // await page.getByRole('link', { name: 'Accounting' }).click();
-        })(),
+        }),
         // ⛔ HARD 3 MINUTE LIMIT
         new Promise((_, reject) =>
           setTimeout(() => reject(new Error('Row exceeded 3 minutes')), 180000)
