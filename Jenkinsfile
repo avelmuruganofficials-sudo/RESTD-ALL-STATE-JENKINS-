@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Run Playwright Tests') {
             steps {
-                bat 'npx playwright test tests/REEXPALLLOB.spec.js --headed --workers=1'
+                bat 'npx playwright test tests/ACEXPALLLOB.spec.js --headed --workers=1'
             }
         }
     }
@@ -62,34 +62,40 @@ pipeline {
         emailext(
             subject: "✅ SUCCESS - Playwright Execution",
             body: """
-                <h2>Playwright Execution Successful</h2>
-                <b>Build:</b> ${env.BUILD_NUMBER}<br><br>
+                Hello,
 
-                <a href="${env.JOB_URL}lastBuild/Playwright%20Report/">
-                👉 View Report
-                </a>
+            Playwright Test Execution Completed.
+
+            Job Name: ${JOB_NAME}
+            Build Number: ${BUILD_NUMBER}
+
+            View HTML Report:
+            ${BUILD_URL}playwright-report/
+
+            Thanks,
+            Jenkins
             """,
-            mimeType: 'text/html',
             to: "a.velmuruganofficials@gmail.com"
         )
     }
 
-    failure {
+    failure {       
         emailext(
             subject: "❌ FAILURE - Playwright Execution",
             body: """
-                <h2>Playwright Execution Failed</h2>
-                <b>Build:</b> ${env.BUILD_NUMBER}<br><br>
+                Hello,
 
-                <a href="${env.BUILD_URL}console">
-                👉 View Console Log
-                </a><br><br>
+            Playwright Test Execution Completed.
 
-                <a href="${env.BUILD_URL}Playwright%20Report/">
-                👉 View Report
-                </a>
+            Job Name: ${JOB_NAME}
+            Build Number: ${BUILD_NUMBER}
+
+            View HTML Report:
+            ${BUILD_URL}playwright-report/
+
+            Thanks,
+            Jenkins
             """,
-            mimeType: 'text/html',
             to: "a.velmuruganofficials@gmail.com"
         )
     }
