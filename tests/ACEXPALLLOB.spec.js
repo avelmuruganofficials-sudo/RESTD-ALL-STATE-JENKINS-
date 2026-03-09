@@ -175,12 +175,13 @@ test('Excel data based automation', async ({ page }) => {
     catch (error) {
       console.log(`⛔ ROW ${i + 1} SKIPPED`);
       console.log(error.message);
-      await page.screenshot({ path: `row-${i + 1}-error.png` });
-      // 🔁 Reset before next row
-      await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
+     if (!page.isClosed()) {
+    await page.screenshot({ path: `row-${i + 1}-error.png` });
+    await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
+  }
       continue;
     }
     await page.waitForTimeout(2000);
   }
 
-});
+}); 
