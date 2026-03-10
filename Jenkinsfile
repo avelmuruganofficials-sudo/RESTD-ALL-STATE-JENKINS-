@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Run Playwright Tests') {
             steps {
-                bat 'npx playwright test tests/ACEXPALLLOB.spec.js --headed --workers=1'
+                bat 'npx playwright test tests/APEXPALLLOB.spec.js --headed --workers=1'
             }
         }
     }

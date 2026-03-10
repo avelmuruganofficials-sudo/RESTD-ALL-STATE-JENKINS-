@@ -5,10 +5,12 @@ const sheet = workbook.Sheets[workbook.SheetNames[0]];
 const data = xlsx.utils.sheet_to_json(sheet);
 test('Excel data based automation', async ({ page }) => {
   // 🔥 GLOBAL SAFETY TIMEOUTS
-  page.setDefaultTimeout(60000);              // 60 sec per action
+  page.setDefaultTimeout(60000);            //60 sec per action
   page.setDefaultNavigationTimeout(60000);    // 60 sec per navigation
   await page.goto('https://www.landydev.com/#/auth/login');
   await page.getByRole('textbox', { name: 'Email' }).fill('velmurugan@stepladdersolutions.com');
+  waitUntil: 'domcontentloaded',
+  await page.waitForTimeout(6000);
   await page.getByRole('textbox', { name: 'Password' }).fill('Step#123');
   await page.getByRole('button', { name: 'Login' }).click();
   for (let i = 0; i < data.length; i++) {
@@ -175,10 +177,10 @@ test('Excel data based automation', async ({ page }) => {
     catch (error) {
       console.log(`⛔ ROW ${i + 1} SKIPPED`);
       console.log(error.message);
-     if (!page.isClosed()) {
-    await page.screenshot({ path: `row-${i + 1}-error.png` });
-    await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
-  }
+      if (!page.isClosed()) {
+        await page.screenshot({ path: `row-${i + 1}-error.png` });
+        await page.goto('https://www.landydev.com/#/pages/riskPolicySearch');
+      }
       continue;
     }
     await page.waitForTimeout(2000);
