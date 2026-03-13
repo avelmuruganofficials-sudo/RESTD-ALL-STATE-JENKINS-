@@ -48,16 +48,16 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
         publishHTML(target: [
-            allowMissing: false,
+            allowMissing: true,
             alwaysLinkToLastBuild: true,
             keepAll: true,
             reportDir: 'playwright-report',
             reportFiles: 'index.html',
             reportName: 'Playwright Report'
-        ])
-        }
+            ])
+            }
          success {
         emailext(
             subject: "✅ SUCCESS - Playwright Execution",
